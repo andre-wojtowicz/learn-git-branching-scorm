@@ -1,39 +1,87 @@
 diff --git a/src/js/level/index.js b/src/js/level/index.js
-index 4e66f433..2f00de65 100644
+index 4e66f433..9826ed01 100644
 --- a/src/js/level/index.js
 +++ b/src/js/level/index.js
-@@ -468,6 +468,14 @@ var Level = Sandbox.extend({
+@@ -468,6 +468,17 @@ var Level = Sandbox.extend({
      if (!this.isShowingSolution) {
        LevelActions.setLevelSolved(this.level.id);
        log.levelSolved(this.getEnglishName());
 +      
-+      var numLevels = 0;
-+      LevelStore.getSequences().forEach((s) => {
-+        LevelStore.getLevelsInSequence(s).forEach((l) => {
-+        numLevels++;
-+      });
-+      });
-+      ScormSaveAnswer(this.level.id, numLevels);
++      if (API != null)
++      {
++        var numLevels = 0;
++        LevelStore.getSequences().forEach((s) => {
++          LevelStore.getLevelsInSequence(s).forEach((l) => {
++            numLevels++;
++          });
++        });
++        ScormSaveAnswer(this.level.id, numLevels);
++      }
      }
  
      this.hideGoal();
 diff --git a/src/js/stores/LevelStore.js b/src/js/stores/LevelStore.js
-index a39ef74c..ea444d56 100644
+index a39ef74c..2be0d9a9 100644
 --- a/src/js/stores/LevelStore.js
 +++ b/src/js/stores/LevelStore.js
-@@ -189,7 +189,14 @@ AppConstants.StoreSubscribePrototype,
+@@ -189,7 +189,15 @@ AppConstants.StoreSubscribePrototype,
      if (!_levelMap[levelID]) {
        throw new Error('that level doesn\'t exist!');
      }
 -    return !!_solvedMap[levelID];
-+    //if (!!_solvedMap[levelID])
-+    //  return true;
++
 +    var sd = ScormProcessGetValue("cmi.suspend_data");
-+    var sd_arr = sd.split(",");
-+    if (sd_arr.includes(levelID))
-+        return true;
++    if (sd != null)
++    {
++      var sd_arr = sd.split(",");
++      return sd_arr.includes(levelID);
++    }
 +
 +    return false;
    },
  
    dispatchToken: AppDispatcher.register(function(payload) {
+diff --git a/src/template.index.html b/src/template.index.html
+index 8f35f91b..85047c7b 100644
+--- a/src/template.index.html
++++ b/src/template.index.html
+@@ -9,10 +9,9 @@
+ 
+   <meta property="og:title" content="Learn Git Branching"/>
+   <meta property="og:type" content="website"/>
+-  <meta property="og:url" content="https://pcottle.github.io/learnGitBranching/index.html?demo"/>
+-  <meta property="og:image" content="https://pcottle.github.io/learnGitBranching/assets/learnGitBranching.png"/>
+   <meta property="og:description" content="An interactive Git visualization tool to educate and challenge!"/>
+   <meta http-equiv="content-language" content="en">
++  <script src="js/scorm.js" type="text/javascript"></script>
+ 
+   <link rel="stylesheet" href="build/{{styleFile}}" type="text/css" charset="utf-8">
+   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+@@ -359,7 +358,7 @@
+   -->
+   <script defer src="build/{{jsFile}}"></script>
+ </head>
+-<body>
++<body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
+   <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
+   <noscript>
+     <div style="z-index:1000000;background:red;color:white;position:absolute;top:0;left:0;height:300px;width:300px;">
+@@ -456,18 +455,5 @@
+ </style>
+ 
+ 
+-  <!-- The advantage of github pages: super-easy, simple, slick static hostic.
+-       The downside? No raw logs to parse for analytics, so I have to include
+-       Google analytics :-/ -->
+-  <script type="text/javascript">
+-    var _gaq = _gaq || [];
+-    _gaq.push(['_setAccount', 'UA-37500646-1']);
+-    _gaq.push(['_trackPageview']);
+-    (function() {
+-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+-    })();
+-  </script>
+ </body>
+ </html>
