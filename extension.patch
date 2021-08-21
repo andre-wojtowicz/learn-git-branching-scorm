@@ -17,3 +17,23 @@ index 4e66f433..2f00de65 100644
      }
  
      this.hideGoal();
+diff --git a/src/js/stores/LevelStore.js b/src/js/stores/LevelStore.js
+index a39ef74c..ea444d56 100644
+--- a/src/js/stores/LevelStore.js
++++ b/src/js/stores/LevelStore.js
+@@ -189,7 +189,14 @@ AppConstants.StoreSubscribePrototype,
+     if (!_levelMap[levelID]) {
+       throw new Error('that level doesn\'t exist!');
+     }
+-    return !!_solvedMap[levelID];
++    //if (!!_solvedMap[levelID])
++    //  return true;
++    var sd = ScormProcessGetValue("cmi.suspend_data");
++    var sd_arr = sd.split(",");
++    if (sd_arr.includes(levelID))
++        return true;
++
++    return false;
+   },
+ 
+   dispatchToken: AppDispatcher.register(function(payload) {

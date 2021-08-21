@@ -277,12 +277,8 @@ function ScormSaveAnswer(id, total)
 
     sd = sd + id + ",";
     ScormProcessSetValue("cmi.suspend_data", sd);
-    
+
     var n = sd_arr.length;
-    
-    var iid = ScormProcessGetValue("cmi.interactions._count");
-    ScormProcessSetValue("cmi.interactions." + iid + ".id", id);
-    ScormProcessSetValue("cmi.interactions." + iid + ".result", "correct");
 
     ScormSaveScore(n, total);
     ScormCommitChanges();
@@ -290,10 +286,10 @@ function ScormSaveAnswer(id, total)
 
 function ScormSaveScore(score, total)
 {
-    ScormProcessSetValue("cmi.core.score.raw", score);
+    ScormProcessSetValue("cmi.core.score.raw", score/total);
     ScormProcessSetValue("cmi.core.score.min", 0);
-    ScormProcessSetValue("cmi.core.score.max", total);
-    if (score == total)
+    ScormProcessSetValue("cmi.core.score.max", 1);
+    if (score/total == 1)
         ScormProcessSetValue("cmi.core.lesson_status", "completed");
     else
         ScormProcessSetValue("cmi.core.lesson_status", "incomplete");
