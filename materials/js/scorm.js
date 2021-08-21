@@ -1,14 +1,15 @@
 /*
+Source: https://scorm.com/scorm-explained/technical-scorm/golf-examples/
+Changed error notification and added helper functions.
+
 Source code created by Rustici Software, LLC is licensed under a 
 Creative Commons Attribution 3.0 United States License
 (http://creativecommons.org/licenses/by/3.0/us/)
-
 Want to make SCORM easy? See our solutions at http://www.scorm.com.
-
-This example demonstrates the use of basic runtime calls in a multi-page SCO. It
-includes a demonstration of bookmarking, status reporting (completion and success), 
-score and time. It also includes the addition of a basic "controller" for providing
-intra-SCO navigation.
+This example demonstrates the use of more advanced runtime calls in a multi-page SCO. It
+includes a demonstration of reporting interactions (question results), and progress
+towards specific learning objective. It also demonstrates using the manifest to specify
+a passing score rather than hard coding the passing score within the content.
 */
 
 
@@ -23,7 +24,7 @@ var nFindAPITries = 0;
 var API = null;
 var maxTries = 500; 
 
-// The ScanForAPI() function searches for an object named API_1484_11
+// The ScanForAPI() function searches for an object named API
 // in the window that is passed into the function.  If the object is
 // found a reference to the object is returned to the calling function.
 // If the instance is found the SCO now has a handle to the LMS
@@ -35,7 +36,7 @@ var maxTries = 500;
 // set to the upper most parent in the chain of parents.
 function ScanForAPI(win)
 {
-   while ((win.API_1484_11 == null) && (win.parent != null)
+   while ((win.API == null) && (win.parent != null)
            && (win.parent != win))
    {
       nFindAPITries++;
@@ -45,7 +46,7 @@ function ScanForAPI(win)
       }
       win = win.parent;
    }
-   return win.API_1484_11;
+   return win.API;
 } 
 
 // The GetAPI() function begins the process of searching for the LMS
@@ -94,20 +95,20 @@ function ScormProcessInitialize(){
     GetAPI(window);
     
     if (API == null){
-        alert("ERROR - Could not establish a connection with the LMS.\n\nYour results may not be recorded.");
+		alert('Could not establish a connection with the LMS.\n\nYour results may not be recorded.', 'Error', 'danger');
         return;
     }
     
-    result = API.Initialize("");
+    result = API.LMSInitialize("");
     
     if (result == SCORM_FALSE){
-        var errorNumber = API.GetLastError();
-        var errorString = API.GetErrorString(errorNumber);
-        var diagnostic = API.GetDiagnostic(errorNumber);
+        var errorNumber = API.LMSGetLastError();
+        var errorString = API.LMSGetErrorString(errorNumber);
+        var diagnostic = API.LMSGetDiagnostic(errorNumber);
         
         var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
         
-        alert("Error - Could not initialize communication with the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
+		alert("Could not initialize communication with the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
         return;
     }
     
@@ -121,18 +122,18 @@ function ScormProcessTerminate(){
     //Don't terminate if we haven't initialized or if we've already terminated
     if (initialized == false || terminateCalled == true){return;}
     
-    result = API.Terminate("");
+    result = API.LMSFinish("");
     
     terminateCalled = true;
     
     if (result == SCORM_FALSE){
-        var errorNumber = API.GetLastError();
-        var errorString = API.GetErrorString(errorNumber);
-        var diagnostic = API.GetDiagnostic(errorNumber);
+        var errorNumber = API.LMSGetLastError();
+        var errorString = API.LMSGetErrorString(errorNumber);
+        var diagnostic = API.LMSGetDiagnostic(errorNumber);
         
         var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
         
-        alert("Error - Could not terminate communication with the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
+		alert("Could not terminate communication with the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
         return;
     }
 }
@@ -154,19 +155,19 @@ function ScormProcessGetValue(element, checkError){
     
     if (initialized == false || terminateCalled == true){return;}
     
-    result = API.GetValue(element);
+    result = API.LMSGetValue(element);
     
     if (checkError == true && result == ""){
     
-        var errorNumber = API.GetLastError();
+        var errorNumber = API.LMSGetLastError();
         
         if (errorNumber != SCORM_NO_ERROR){
-            var errorString = API.GetErrorString(errorNumber);
-            var diagnostic = API.GetDiagnostic(errorNumber);
+            var errorString = API.LMSGetErrorString(errorNumber);
+            var diagnostic = API.LMSGetDiagnostic(errorNumber);
             
             var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
             
-            alert("Error - Could not retrieve a value from the LMS.\n\n" + errorDescription);
+			alert("Could not retrieve a value from the LMS.\n\n" + errorDescription);
             return "";
         }
     }
@@ -180,35 +181,110 @@ function ScormProcessSetValue(element, value){
     
     if (initialized == false || terminateCalled == true){return;}
     
-    result = API.SetValue(element, value);
+    result = API.LMSSetValue(element, value);
     
     if (result == SCORM_FALSE){
-        var errorNumber = API.GetLastError();
-        var errorString = API.GetErrorString(errorNumber);
-        var diagnostic = API.GetDiagnostic(errorNumber);
+        var errorNumber = API.LMSGetLastError();
+        var errorString = API.LMSGetErrorString(errorNumber);
+        var diagnostic = API.LMSGetDiagnostic(errorNumber);
         
         var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
         
-        alert("Error - Could not store a value in the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
+		alert("Could not store a value in the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
         return;
     }
     
 }
 
-function ScormProcessCommit(){
-    
+function ScormCommitChanges(){
+   
     var result;
     
-    result = API.Commit("");
+    if (initialized == false || terminateCalled == true){return;}
+    
+    result = API.LMSCommit("");
     
     if (result == SCORM_FALSE){
-        var errorNumber = API.GetLastError();
-        var errorString = API.GetErrorString(errorNumber);
-        var diagnostic = API.GetDiagnostic(errorNumber);
+        var errorNumber = API.LMSGetLastError();
+        var errorString = API.LMSGetErrorString(errorNumber);
+        var diagnostic = API.LMSGetDiagnostic(errorNumber);
         
         var errorDescription = "Number: " + errorNumber + "\nDescription: " + errorString + "\nDiagnostic: " + diagnostic;
         
-        alert("Error - Could not invoke Commit.\n\nYour results may not be recorded.\n\n" + errorDescription);
+		alert("Could not commit changes to the LMS.\n\nYour results may not be recorded.\n\n" + errorDescription);
         return;
     }
+    
+}
+
+function ScormLessonCompleted()
+{   
+    if (ScormProcessGetValue("cmi.core.lesson_status") == "completed")
+        return true;
+    
+    return false;
+}
+
+function ScormLessonPassed()
+{   
+    if (ScormProcessGetValue("cmi.core.lesson_status") == "passed")
+        return true;
+    
+    return false;
+}
+
+function ScormLessonNotAttempted()
+{   
+    if (ScormProcessGetValue("cmi.core.lesson_status") == "not attempted")
+        return true;
+    
+    return false;
+}
+
+
+function ScormMarkAsCompleted()
+{   
+    ScormProcessSetValue("cmi.core.lesson_status", "completed");
+}
+
+function ScormMarkAsIncomplete()
+{   
+    ScormProcessSetValue("cmi.core.lesson_status", "incomplete");
+}
+
+function ScormMarkAsPassed()
+{   
+    ScormProcessSetValue("cmi.core.lesson_status", "passed");
+}
+
+function ScormMarkAsFailed()
+{   
+    ScormProcessSetValue("cmi.core.lesson_status", "failed");
+}
+
+function ScormMarkAsBrowsed()
+{   
+    ScormProcessSetValue("cmi.core.lesson_status", "browsed");
+}
+
+function ScormSaveAnswer(id, type, student_response, pattern, result)
+{   
+    ScormProcessSetValue("cmi.interactions." + (id-1) + ".id", id);
+    ScormProcessSetValue("cmi.interactions." + (id-1) + ".type", type);
+    ScormProcessSetValue("cmi.interactions." + (id-1) + ".student_response", student_response);
+    ScormProcessSetValue("cmi.interactions." + (id-1) + ".correct_responses.0.pattern", pattern);
+    ScormProcessSetValue("cmi.interactions." + (id-1) + ".result", result);
+}
+
+function ScormSaveScore(score, total, sessionTime)
+{
+    ScormProcessSetValue("cmi.core.score.raw", score);
+    ScormProcessSetValue("cmi.core.score.min", 0);
+    ScormProcessSetValue("cmi.core.score.max", total);
+    ScormProcessSetValue("cmi.core.lesson_status", "passed");
+    ScormProcessSetValue("cmi.core.session_time", sessionTime);
+    
+    var comment = ScormProcessGetValue("cmi.comments");
+    
+    ScormProcessSetValue("cmi.comments", comment + (new Date()).toString() + "; ");
 }
