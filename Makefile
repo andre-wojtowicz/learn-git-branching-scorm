@@ -6,7 +6,12 @@ deps:
 site:
 	git clone https://github.com/pcottle/learnGitBranching.git site
 	cd site && \
+	git apply --whitespace=nowarn ../extension.patch && \
 	yarn install && \
+	yarn gulp fastBuild
+
+rebuild-site:
+	cd site && \
 	yarn gulp fastBuild
 
 scorm:

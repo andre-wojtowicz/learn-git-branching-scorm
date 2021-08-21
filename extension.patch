@@ -1,0 +1,19 @@
+diff --git a/src/js/level/index.js b/src/js/level/index.js
+index 4e66f433..2f00de65 100644
+--- a/src/js/level/index.js
++++ b/src/js/level/index.js
+@@ -468,6 +468,14 @@ var Level = Sandbox.extend({
+     if (!this.isShowingSolution) {
+       LevelActions.setLevelSolved(this.level.id);
+       log.levelSolved(this.getEnglishName());
++      
++      var numLevels = 0;
++      LevelStore.getSequences().forEach((s) => {
++        LevelStore.getLevelsInSequence(s).forEach((l) => {
++        numLevels++;
++      });
++      });
++      ScormSaveAnswer(this.level.id, numLevels);
+     }
+ 
+     this.hideGoal();

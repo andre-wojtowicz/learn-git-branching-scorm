@@ -1,6 +1,6 @@
 /*
 Source: https://scorm.com/scorm-explained/technical-scorm/golf-examples/
-Changed error notification and added helper functions.
+Changed getting, setting values, saving results and added helper functions.
 
 Source code created by Rustici Software, LLC is licensed under a 
 Creative Commons Attribution 3.0 United States License
@@ -149,7 +149,7 @@ occur at these times in this example.
 
 //There are situations where a GetValue call is expected to have an error
 //and should not alert the user.
-function ScormProcessGetValue(element, checkError){
+function ScormProcessGetValue(element, checkError = true){
     
     var result;
     
@@ -267,24 +267,34 @@ function ScormMarkAsBrowsed()
     ScormProcessSetValue("cmi.core.lesson_status", "browsed");
 }
 
-function ScormSaveAnswer(id, type, student_response, pattern, result)
+function ScormSaveAnswer(id, total)
 {   
-    ScormProcessSetValue("cmi.interactions." + (id-1) + ".id", id);
-    ScormProcessSetValue("cmi.interactions." + (id-1) + ".type", type);
-    ScormProcessSetValue("cmi.interactions." + (id-1) + ".student_response", student_response);
-    ScormProcessSetValue("cmi.interactions." + (id-1) + ".correct_responses.0.pattern", pattern);
-    ScormProcessSetValue("cmi.interactions." + (id-1) + ".result", result);
+    var sd = ScormProcessGetValue("cmi.suspend_data");
+    var sd_arr = sd.split(",");
+
+    if (sd_arr.includes(id))
+        return;
+
+    sd = sd + id + ",";
+    ScormProcessSetValue("cmi.suspend_data", sd);
+    
+    var n = sd_arr.length;
+    
+    var iid = ScormProcessGetValue("cmi.interactions._count");
+    ScormProcessSetValue("cmi.interactions." + iid + ".id", id);
+    ScormProcessSetValue("cmi.interactions." + iid + ".result", "correct");
+
+    ScormSaveScore(n, total);
+    ScormCommitChanges();
 }
 
-function ScormSaveScore(score, total, sessionTime)
+function ScormSaveScore(score, total)
 {
     ScormProcessSetValue("cmi.core.score.raw", score);
     ScormProcessSetValue("cmi.core.score.min", 0);
     ScormProcessSetValue("cmi.core.score.max", total);
-    ScormProcessSetValue("cmi.core.lesson_status", "passed");
-    ScormProcessSetValue("cmi.core.session_time", sessionTime);
-    
-    var comment = ScormProcessGetValue("cmi.comments");
-    
-    ScormProcessSetValue("cmi.comments", comment + (new Date()).toString() + "; ");
+    if (score == total)
+        ScormProcessSetValue("cmi.core.lesson_status", "completed");
+    else
+        ScormProcessSetValue("cmi.core.lesson_status", "incomplete");
 }
