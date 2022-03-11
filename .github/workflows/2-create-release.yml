@@ -17,7 +17,7 @@ jobs:
       with:
         submodules: recursive
     - name: version
-      run: echo "::set-output name=version::$(date '+%Y_%m_%d-%H_%M')"
+      run: echo "::set-output name=version::$(date '+%Y-%m-%d')"
       id: var1
     - name: message
       run: echo "::set-output name=message::$(git log -1 --pretty=%B | head -1)"
@@ -28,8 +28,8 @@ jobs:
       with:
         draft: false
         prerelease: false
-        release_name: Release ${{ steps.var1.outputs.version }}
-        tag_name: ${{ steps.var1.outputs.version }}
+        release_name: Build ${{ steps.var1.outputs.version }}
+        tag_name: v1.0
         body: ${{ steps.var2.outputs.message }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
