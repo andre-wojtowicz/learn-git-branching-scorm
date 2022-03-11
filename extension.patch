@@ -42,7 +42,7 @@ index a39ef74c..2be0d9a9 100644
  
    dispatchToken: AppDispatcher.register(function(payload) {
 diff --git a/src/template.index.html b/src/template.index.html
-index 8f35f91b..85047c7b 100644
+index 0a594910..43afeb10 100644
 --- a/src/template.index.html
 +++ b/src/template.index.html
 @@ -9,10 +9,9 @@
@@ -55,18 +55,18 @@ index 8f35f91b..85047c7b 100644
    <meta http-equiv="content-language" content="en">
 +  <script src="js/scorm.js" type="text/javascript"></script>
  
-   <link rel="stylesheet" href="build/{{styleFile}}" type="text/css" charset="utf-8">
+   <link rel="stylesheet" href="{{buildDir}}/{{styleFile}}" type="text/css" charset="utf-8">
    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 @@ -359,7 +358,7 @@
    -->
-   <script defer src="build/{{jsFile}}"></script>
+   <script defer src="{{buildDir}}/{{jsFile}}"></script>
  </head>
 -<body>
 +<body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
    <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
    <noscript>
      <div style="z-index:1000000;background:red;color:white;position:absolute;top:0;left:0;height:300px;width:300px;">
-@@ -456,18 +455,5 @@
+@@ -457,18 +456,5 @@
  </style>
  
  
