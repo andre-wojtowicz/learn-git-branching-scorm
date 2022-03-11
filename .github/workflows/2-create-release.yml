@@ -29,7 +29,7 @@ jobs:
         draft: false
         prerelease: false
         release_name: Build ${{ steps.var1.outputs.version }}
-        tag_name: v1.0
+        tag_name: v${{ steps.var1.outputs.version }}
         body: ${{ steps.var2.outputs.message }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
