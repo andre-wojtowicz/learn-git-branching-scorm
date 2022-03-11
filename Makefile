@@ -1,8 +1,10 @@
 deps:
 	@echo \* Installing dependencies...
 	apt update
-	apt install nodejs npm -y
-	npm install --global gulp-cli yarn
+	curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
+	apt install nodejs -y
+	curl -o- -L https://yarnpkg.com/install.sh | bash
+	export PATH="$HOME/.yarn/bin:$PATH"
 	@echo \* ...done
 
 site:
