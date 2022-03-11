@@ -35,7 +35,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
     - name: build artifact
       run: |
-        make deps
+        sudo make deps
         make site
         make scorm
         echo "::set-output name=zipfname::$(basename $(ls ./dist/*.zip))"
