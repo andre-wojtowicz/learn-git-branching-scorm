@@ -4,11 +4,11 @@ deps:
 	curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 	apt install nodejs -y
 	curl -o- -L https://yarnpkg.com/install.sh | bash
-	export PATH="$HOME/.yarn/bin:$PATH"
 	@echo \* ...done
 
 site:
 	@echo \* Preparing learnGitBranching website files...
+	export PATH=$$HOME/.yarn/bin:$$HOME/.config/yarn/global/node_modules/.bin:$$PATH && \
 	cd learnGitBranching && \
 	git apply --whitespace=nowarn ../extension.patch && \
 	yarn install && \
@@ -17,6 +17,7 @@ site:
 
 rebuild-site:
 	@echo \* Rebuilding learnGitBranching website files...
+	export PATH=$$HOME/.yarn/bin:$$HOME/.config/yarn/global/node_modules/.bin:$$PATH && \
 	cd learnGitBranching && \
 	yarn gulp fastBuild
 	@echo \* ...done

@@ -10,6 +10,7 @@ Clone this repo and init submodule:
 
 ```shell
 $ git clone --recurse-submodules https://github.com/andre-wojtowicz/learn-git-branching-scorm.git
+$ cd learn-git-branching-scorm
 ```
 
 Install dependencies:
