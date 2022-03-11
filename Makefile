@@ -28,7 +28,7 @@ scorm:
 	mkdir dist
 	cp -r imsmanifest.xml materials dist
 	sed -i "s/Last edit: .../Last edit: $(shell date '+%Y-%m-%d %H:%M')/" dist/imsmanifest.xml
-	cp -r learnGitBranching/index.html learnGitBranching/build learnGitBranching/assets dist/materials
+	cp -r learnGitBranching/build/* dist/materials
 	cd dist && \
 	zip "lgb-scorm-$(shell date '+%Y_%m_%d-%H_%M').zip" -r .
 	@echo ------------------------------------------
