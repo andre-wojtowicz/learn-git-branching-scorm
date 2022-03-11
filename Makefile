@@ -7,8 +7,7 @@ deps:
 
 site:
 	@echo \* Preparing learnGitBranching website files...
-	git clone https://github.com/pcottle/learnGitBranching.git site
-	cd site && \
+	cd learnGitBranching && \
 	git apply --whitespace=nowarn ../extension.patch && \
 	yarn install && \
 	yarn gulp fastBuild
@@ -16,7 +15,7 @@ site:
 
 rebuild-site:
 	@echo \* Rebuilding learnGitBranching website files...
-	cd site && \
+	cd learnGitBranching && \
 	yarn gulp fastBuild
 	@echo \* ...done
 
@@ -26,7 +25,7 @@ scorm:
 	mkdir dist
 	cp -r imsmanifest.xml materials dist
 	sed -i "s/Last edit: .../Last edit: $(shell date '+%Y-%m-%d %H:%M')/" dist/imsmanifest.xml
-	cp -r site/index.html site/build site/assets dist/materials
+	cp -r learnGitBranching/index.html learnGitBranching/build learnGitBranching/assets dist/materials
 	cd dist && \
 	zip "lgb-scorm-$(shell date '+%Y_%m_%d-%H_%M').zip" -r .
 	@echo ------------------------------------------
@@ -35,5 +34,5 @@ scorm:
 
 clean:
 	@echo \* Removing learnGitBranching website files and SCORM build directory...
-	rm -rf site dist
+	rm -rf learnGitBranching dist
 	@echo \*...done

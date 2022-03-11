@@ -1,0 +1,52 @@
+name: Create release
+
+on:
+  repository_dispatch:
+    types: [submodule-updated]
+
+  workflow_dispatch:
+
+jobs:
+  create-release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository and submodule
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: version
+      run: echo "::set-output name=version::$(date '+%Y_%m_%d-%H_%M')"
+      id: var1
+    - name: message
+      run: echo "::set-output name=message::$(git log -1 --pretty=%B | head -1)"
+      id: var2
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: Release ${{ steps.var1.outputs.version }}
+        tag_name: ${{ steps.var1.outputs.version }}
+        body: ${{ steps.var2.outputs.message }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: build artifact
+      run: |
+        make deps
+        make site
+        make scorm
+        echo "::set-output name=zipfname::$(basename $(ls ./dist/*.zip))"
+      id: buildart
+    - name: upload artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/${{ steps.buildart.outputs.zipfname }}
+        asset_name: ${{ steps.buildart.outputs.zipfname }}
+        asset_content_type: application/zip
+        

@@ -1,0 +1,3 @@
+[submodule "learnGitBranching"]
+	path = learnGitBranching
+	url = https://github.com/pcottle/learnGitBranching.git

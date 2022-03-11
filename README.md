@@ -2,13 +2,23 @@
 
 This repository contains scripts to wrap <https://learngitbranching.js.org> into SCORM package. I use it to grade students' activity in Moodle.
 
+Latest automatic build are on [releases page](https://github.com/andre-wojtowicz/learn-git-branching-scorm/releases).
+
+## Manual build
+
+Clone this repo and init submodule:
+
+```shell
+$ git clone --recurse-submodules https://github.com/andre-wojtowicz/learn-git-branching-scorm.git
+```
+
 Install dependencies:
 
 ```shell
 $ sudo make deps
 ```
 
-Download [LearnGitBranching](https://github.com/pcottle/learnGitBranching) files and build site:
+Build site:
 
 ```shell
 $ make site
@@ -20,7 +30,7 @@ Build `scorm.zip` in `dist` directory:
 $ make scorm
 ```
 
-Moodle SCORM activity settings:
+## Moodle SCORM activity settings
 
 ```plaintext
 Appearance:

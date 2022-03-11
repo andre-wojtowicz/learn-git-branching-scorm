@@ -1,0 +1,46 @@
+name: Submodule update
+
+on:
+  schedule:
+    - cron: '* 6 * * MON'
+    
+  workflow_dispatch:
+
+jobs:
+  check-and-update:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository and submodule
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    
+    - name: script
+      run: |
+        cd mytestsubm
+        if [ $(git rev-list HEAD...origin/main --count) != 0 ]; then
+            echo 'Update pending'
+            echo "REPO_DISPATCH=true" >> "$GITHUB_ENV"
+        else
+            echo 'Nothing to update'
+            echo "REPO_DISPATCH=false" >> "$GITHUB_ENV"
+            exit 0
+        fi
+        
+        cd ..
+        msg=$(git submodule update --remote)
+        commitstr=$(echo $msg | grep -oP "checked out '\K\w+")
+        git config --global user.name 'Git bot'
+        git config --global user.email 'bot@noreply.github.com'
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git commit -am "Auto updated submodule reference: pcottle/learnGitBranching@${commitstr}"
+        git push
+    - name: Repository Dispatch
+      if: env.REPO_DISPATCH != 'false'
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        repository: ${{ github.repository }}
+        event-type: submodule-updated
