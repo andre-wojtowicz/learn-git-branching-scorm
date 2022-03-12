@@ -1,0 +1,71 @@
+name: Build and release
+
+on:
+  repository_dispatch:
+    types: [submodule-updated]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repository and submodule
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: make SCORM zip
+      run: |
+        sudo make deps
+        make site
+        make scorm
+    - name: upload artifact
+      uses: actions/upload-artifact@v3
+      if: ${{ !env.ACT }}
+      with:
+        name: scorm_zip
+        path: ./dist/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repository and submodule
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: get release version
+      run: echo "::set-output name=version::$(date '+%Y-%m-%d')"
+      id: var1
+    - name: get release message
+      run: echo "::set-output name=message::$(git log -1 --pretty=%B | head -1)"
+      id: var2
+    - name: create release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: Build ${{ steps.var1.outputs.version }}
+        tag_name: v${{ steps.var1.outputs.version }}
+        body: ${{ steps.var2.outputs.message }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: download artifact
+      uses: actions/download-artifact@master
+      with:
+        name: scorm_zip
+        path: ./dist/
+    - name: get zip file name
+      run: echo "::set-output name=zipfname::$(basename $(ls ./dist/*.zip))"
+      id: getzipfilename
+    - name: upload SCORM zip to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/${{ steps.getzipfilename.outputs.zipfname }}
+        asset_name: ${{ steps.getzipfilename.outputs.zipfname }}
+        asset_content_type: application/zip
+        
