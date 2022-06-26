@@ -26,6 +26,34 @@ jobs:
         name: scorm_zip
         path: ./dist/
 
+  pages:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repository gh-pages
+      uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+    - name: download artifact
+      uses: actions/download-artifact@master
+      with:
+        name: scorm_zip
+        path: ./dist/
+    - name: script
+      run: |
+        rm -rf materials imsmanifest.xml
+        unzip dist/*.zip -d .
+        rm -rf dist
+        if [[ $(git status --porcelain) ]]; then
+          git config --global user.name 'Git bot'
+          git config --global user.email 'bot@noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Auto updated pages"
+          git push -u origin gh-pages
+        else
+          echo "Nothing to update"
+        fi
+
   release:
     needs: build
     runs-on: ubuntu-latest

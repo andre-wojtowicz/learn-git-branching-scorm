@@ -4,6 +4,8 @@ This repository contains scripts to wrap <https://learngitbranching.js.org> into
 
 The latest automatically built SCORM package can be downloaded from [Releases](https://github.com/andre-wojtowicz/learn-git-branching-scorm/releases).
 
+[Live preview](https://andre-wojtowicz.github.io/learn-git-branching-scorm/) with simple SCO run-time test environment (click "Launch SCO" in top-left corner).
+
 ## Moodle SCORM activity settings
 
 ```plaintext
