@@ -41,8 +41,23 @@ index a39ef74c..2be0d9a9 100644
    },
  
    dispatchToken: AppDispatcher.register(function(payload) {
+diff --git a/src/style/font-awesome.css b/src/style/font-awesome.css
+index 57f6f1fe..b9f8a03c 100644
+--- a/src/style/font-awesome.css
++++ b/src/style/font-awesome.css
+@@ -23,8 +23,8 @@
+     */
+ @font-face {
+   font-family: "FontAwesome";
+-  src: url('../assets/font/fontawesome-webfont.eot');
+-  src: url('../assets/font/fontawesome-webfont.eot?#iefix') format('eot'), url('../assets/font/fontawesome-webfont.woff') format('woff'), url('../assets/font/fontawesome-webfont.ttf') format('truetype'), url('../assets/font/fontawesome-webfont.svg#FontAwesome') format('svg');
++  src: url('assets/font/fontawesome-webfont.eot');
++  src: url('assets/font/fontawesome-webfont.eot?#iefix') format('eot'), url('assets/font/fontawesome-webfont.woff') format('woff'), url('assets/font/fontawesome-webfont.ttf') format('truetype'), url('assets/font/fontawesome-webfont.svg#FontAwesome') format('svg');
+   font-weight: normal;
+   font-style: normal;
+ }
 diff --git a/src/template.index.html b/src/template.index.html
-index 0a594910..43afeb10 100644
+index b04c1d56..d6c9197a 100644
 --- a/src/template.index.html
 +++ b/src/template.index.html
 @@ -9,10 +9,9 @@
@@ -66,7 +81,7 @@ index 0a594910..43afeb10 100644
    <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
    <noscript>
      <div style="z-index:1000000;background:red;color:white;position:absolute;top:0;left:0;height:300px;width:300px;">
-@@ -457,18 +456,5 @@
+@@ -460,18 +459,5 @@
  </style>
  
  
