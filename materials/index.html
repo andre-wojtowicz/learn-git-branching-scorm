@@ -13,7 +13,7 @@
   <meta http-equiv="content-language" content="en">
   <script src="js/scorm.js" type="text/javascript"></script>
 
-  <link rel="stylesheet" href="./main-53f9e81b.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./main-2c867893.css" type="text/css" charset="utf-8">
   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 
@@ -126,14 +126,14 @@
     </p>
     <div class="iconHolder box horizontal">
       <% for (var i = 0; i < ids.length; i++) { %>
-        <div class="levelIcon box center centerAlign vertical" id="levelIcon-<%=ids[i]%>" data-id="<%=ids[i]%>">
+        <a href="javascript:void(0)" class="levelIcon box center centerAlign vertical" id="levelIcon-<%=ids[i]%>" data-id="<%=ids[i]%>">
           <div class="index box" data-id="<%=ids[i]%>">
             <i class="icon-ok-circle" data-id="<%=ids[i]%>"></i>
             <div class="indexNum" data-id="<%=ids[i]%>">
               <%= i + 1 %>
             </div>
           </div>
-        </div>
+        </a>
       <% } %>
     </div>
   </script>
@@ -356,7 +356,7 @@
        For a much easier time perusing the source, see the individual files at:
           https://github.com/pcottle/learnGitBranching
   -->
-  <script defer src="./bundle-43f82828.js"></script>
+  <script defer src="./bundle-2542b05a.js"></script>
 </head>
 <body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
   <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
