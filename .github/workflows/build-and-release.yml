@@ -45,8 +45,8 @@ jobs:
         unzip dist/*.zip -d .
         rm -rf dist
         if [[ $(git status --porcelain) ]]; then
-          git config --global user.name 'Git bot'
-          git config --global user.email 'bot@noreply.github.com'
+          git config --global user.name 'Submodule reference'
+          git config --global user.email 'reference@awojt.pl'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git add .
           git commit -am "Auto updated pages"
