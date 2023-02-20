@@ -325,9 +325,13 @@
   </script>
 
   <script type="text/html" id="confirm-cancel-template">
-    <button class="noStyle box cancelButton uiButton uiButtonRed">
-      <%= cancel %>
-    </button>
+    <% if (disableCancelButton) { %>
+      <span></span>
+    <% } else { %>
+      <button class="noStyle box cancelButton uiButton uiButtonRed">
+        <%= cancel %>
+      </button>
+    <% } %>
     <button class="noStyle box confirmButton uiButton uiButtonYellow">
       <%= confirm %>
     </button>
@@ -356,7 +360,7 @@
        For a much easier time perusing the source, see the individual files at:
           https://github.com/pcottle/learnGitBranching
   -->
-  <script defer src="./bundle-462128ec.js"></script>
+  <script defer src="./bundle-2e81953b.js"></script>
 </head>
 <body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
   <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
