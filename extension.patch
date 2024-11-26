@@ -1,12 +1,12 @@
 diff --git a/src/js/level/index.js b/src/js/level/index.js
-index 4e66f433..9826ed01 100644
+index d56f027b..5203db86 100644
 --- a/src/js/level/index.js
 +++ b/src/js/level/index.js
-@@ -468,6 +468,17 @@ var Level = Sandbox.extend({
-     if (!this.isShowingSolution) {
-       LevelActions.setLevelSolved(this.level.id);
+@@ -485,6 +485,17 @@ var Level = Sandbox.extend({
+
+       LevelActions.setLevelSolved(this.level.id, isBest);
        log.levelSolved(this.getEnglishName());
-+      
++
 +      if (API != null)
 +      {
 +        var numLevels = 0;
@@ -18,29 +18,38 @@ index 4e66f433..9826ed01 100644
 +        ScormSaveAnswer(this.level.id, numLevels);
 +      }
      }
- 
      this.hideGoal();
+
 diff --git a/src/js/stores/LevelStore.js b/src/js/stores/LevelStore.js
-index a39ef74c..2be0d9a9 100644
+index 795e51a1..a00f8462 100644
 --- a/src/js/stores/LevelStore.js
 +++ b/src/js/stores/LevelStore.js
-@@ -189,7 +189,15 @@ AppConstants.StoreSubscribePrototype,
-     if (!_levelMap[levelID]) {
-       throw new Error('that level doesn\'t exist!');
-     }
--    return !!_solvedMap[levelID];
-+
+@@ -186,17 +186,19 @@ AppConstants.StoreSubscribePrototype,
+   },
+
+   isLevelSolved: function(levelID) {
+-    var levelData = _solvedMap[levelID];
+-    if (levelData === true) {
+-      return true;
 +    var sd = ScormProcessGetValue("cmi.suspend_data");
 +    if (sd != null)
 +    {
 +      var sd_arr = sd.split(",");
 +      return sd_arr.includes(levelID);
-+    }
+     }
+-    return levelData ? levelData.solved === true : false;
 +
 +    return false;
    },
- 
-   dispatchToken: AppDispatcher.register(function(payload) {
+
+
+   isLevelBest: function(levelID) {
+-    var levelData = _solvedMap[levelID];
+-    return levelData ? levelData.best === true : false;
++    return false;
+   },
+
+
 diff --git a/src/style/font-awesome.css b/src/style/font-awesome.css
 index 57f6f1fe..b9f8a03c 100644
 --- a/src/style/font-awesome.css

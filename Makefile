@@ -10,7 +10,7 @@ site:
 	@echo \* Preparing learnGitBranching website files...
 	export PATH=$$HOME/.yarn/bin:$$HOME/.config/yarn/global/node_modules/.bin:$$PATH && \
 	cd learnGitBranching && \
-	git apply --whitespace=nowarn ../extension.patch && \
+	git apply --whitespace=fix ../extension.patch && \
 	yarn install && \
 	yarn gulp fastBuild
 	@echo \* ...done
