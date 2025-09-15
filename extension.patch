@@ -90,10 +90,10 @@ index b04c1d56..d6c9197a 100644
    <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
    <noscript>
      <div style="z-index:1000000;background:red;color:white;position:absolute;top:0;left:0;height:300px;width:300px;">
-@@ -460,18 +459,5 @@
+@@ -467,14 +467,5 @@
  </style>
- 
- 
+
+
 -  <!-- Google tag (gtag.js) -->
 -  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SF8FGS1DYX"></script>
 -  <script>
