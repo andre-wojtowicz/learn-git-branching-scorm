@@ -66,7 +66,7 @@ index 57f6f1fe..b9f8a03c 100644
    font-style: normal;
  }
 diff --git a/src/template.index.html b/src/template.index.html
-index 0d36c79b..39a49820 100644
+index 6d116f9c..4acf2f77 100644
 --- a/src/template.index.html
 +++ b/src/template.index.html
 @@ -8,9 +8,8 @@
@@ -89,7 +89,7 @@ index 0d36c79b..39a49820 100644
    <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
    <noscript>
      <div style="z-index:1000000;background:red;color:white;position:absolute;top:0;left:0;height:300px;width:300px;">
-@@ -485,14 +484,5 @@
+@@ -499,15 +498,6 @@
  </style>
 
 
@@ -102,5 +102,6 @@ index 0d36c79b..39a49820 100644
 -
 -    gtag('config', 'G-SF8FGS1DYX');
 -  </script>
- </body>
- </html>
+
+   <script>
+     (function () {
