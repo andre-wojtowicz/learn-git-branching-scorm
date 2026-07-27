@@ -30,7 +30,7 @@
   <!-- end testing -->
   <meta http-equiv="content-language" content="en">
 
-  <link rel="stylesheet" href="./main-0b082b5a.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="./main-84c2187b.css" type="text/css" charset="utf-8">
   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
 
@@ -46,7 +46,10 @@
         <div class="toolbar box vertical center">
           <div class="controls box horizontal justify">
             <div class="box flex1">
-              <div class="close">
+              <div
+                class="close"
+                aria-label="<%- closeWindowText %>"
+                data-tooltip="<%- closeWindowText %>">
               </div>
             </div>
             <div class="box flex1">
@@ -83,7 +86,10 @@
         <div class="toolbar box vertical center">
           <div class="controls box horizontal justify">
             <div class="box flex1">
-              <div class="close">
+              <div
+                class="close"
+                aria-label="<%- closeWindowText %>"
+                data-tooltip="<%- closeWindowText %>">
               </div>
             </div>
             <div class="box flex1">
@@ -324,22 +330,22 @@
   <script type="text/html" id="left-right-template">
     <% if (!showLeft && lastNav ) { %>
       <div class="box right">
-        <button class="noStyle"><i aria-hidden="true" class="icon-ok exit"></i><span class="visuallyHidden">OK</span></button>
+        <button class="noStyle"><i aria-hidden="true" class="icon-ok exit"></i><span class="visuallyHidden hoverLabel">OK</span></button>
       </div>
     <% } else { %>
       <% if (showLeft) { %>
         <div class="box left">
-          <button class="noStyle"><i aria-hidden="true" class="icon-circle-arrow-left"></i><span class="visuallyHidden">Previous</span></button>
+          <button class="noStyle"><i aria-hidden="true" class="icon-circle-arrow-left"></i><span class="visuallyHidden hoverLabel">Back</span></button>
       <% } else { %>
         <div class="box exit">
-          <button class="noStyle"><i aria-hidden="true" class="icon-signout"></i><span class="visuallyHidden">Close</span></button>
+          <button class="noStyle"><i aria-hidden="true" class="icon-signout"></i><span class="visuallyHidden hoverLabel">Close</span></button>
       <% } %>
       </div>
       <div class="box right">
         <% if (!lastNav) { %>
-          <button class="noStyle"><i aria-hidden="true" class="icon-circle-arrow-right"></i><span class="visuallyHidden">Next</span></button>
+          <button class="noStyle"><i aria-hidden="true" class="icon-circle-arrow-right"></i><span class="visuallyHidden hoverLabel">Next</span></button>
         <% } else { %>
-          <button class="noStyle"><i aria-hidden="true"  class="icon-ok"></i><span class="visuallyHidden">OK</span></button>
+          <button class="noStyle"><i aria-hidden="true"  class="icon-ok"></i><span class="visuallyHidden hoverLabel">OK</span></button>
         <% } %>
       </div>
     <% } %>
@@ -381,7 +387,7 @@
        For a much easier time perusing the source, see the individual files at:
           https://github.com/pcottle/learnGitBranching
   -->
-  <script defer src="./bundle-2b42c3be.js"></script>
+  <script defer src="./bundle-f37b7004.js"></script>
 </head>
 <body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
   <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
@@ -472,16 +478,15 @@
   <div id="helperBarMount">
   </div>
 
-  <a id="biteReadImageLink" class="biteReadImage" href="https://biteread.ai/collection/learn-git-branching" target="_blank" rel="noopener noreferrer">
-    <img id="biteReadImage" src="assets/biteRead.png" alt="BiteRead" />
+  <a id="upsellImageLink" class="upsellImage" href="#" target="_blank" rel="noopener noreferrer" style="display: none;">
+    <img id="upsellImage" src="" alt="" />
   </a>
-  <div id="biteReadUpsell" class="biteReadUpsell" role="complementary" aria-label="BiteRead promotion">
-    <button id="biteReadUpsellDismiss" class="biteReadUpsellDismiss noStyle" aria-label="Dismiss BiteRead message">
+  <div id="upsell" class="upsell" role="complementary" aria-label="Project promotion" style="display: none;">
+    <button id="upsellDismiss" class="upsellDismiss noStyle" aria-label="Dismiss message">
       &times;
     </button>
-    <div class="biteReadUpsellContent">
-      <p>
-        Learn more about Software Engineering at my new project, <a href="https://biteread.ai/collection/learn-git-branching" target="_blank" rel="noopener noreferrer" style="color: #6eb5ff; text-decoration: none;">BiteRead</a>!
+    <div class="upsellContent">
+      <p id="upsellText">
       </p>
     </div>
   </div>
@@ -501,48 +506,103 @@
 
   <script>
     (function () {
-      var STORAGE_KEY = 'biteReadUpsellDismissedAt';
+      var STORAGE_KEY = 'upsellDismissedAt';
+      var LEGACY_STORAGE_KEY = 'biteReadUpsellDismissedAt';
       var DAYS_UNTIL_RESHOW = 7;
-      var dismissButton = document.getElementById('biteReadUpsellDismiss');
-      var upsellCard = document.getElementById('biteReadUpsell');
-      var upsellImage = document.getElementById('biteReadImageLink');
+
+      var UPSELLS = {
+        biteRead: {
+          href: 'https://biteread.ai/collection/learn-git-branching',
+          image: 'assets/biteRead.png',
+          alt: 'BiteRead',
+          html: 'Learn more about Software Engineering at my new project, ' +
+            '<a href="https://biteread.ai/collection/learn-git-branching" target="_blank" rel="noopener noreferrer" style="color: #6eb5ff; text-decoration: none;">BiteRead</a>!'
+        },
+        waitingFor: {
+          href: 'https://waitingfor.ai/?utm_source=learngitbranching&utm_medium=referral&utm_campaign=upsell',
+          image: 'assets/waitingFor.png',
+          alt: 'WaitingFor.AI',
+          html: 'Waiting on your coding agents? Catch a vibe at my new project, ' +
+            '<a href="https://waitingfor.ai/?utm_source=learngitbranching&utm_medium=referral&utm_campaign=upsell" target="_blank" rel="noopener noreferrer" style="color: #6eb5ff; text-decoration: none;">WaitingFor.AI</a>!'
+        }
+      };
+
+      // 70/30 weighted toward WaitingFor.AI: cycle through this pattern one
+      // step per visit, spread out so consecutive visits alternate as much as
+      // the weighting allows.
+      var ROTATION = [
+        'waitingFor', 'biteRead', 'waitingFor', 'waitingFor', 'biteRead',
+        'waitingFor', 'waitingFor', 'biteRead', 'waitingFor', 'waitingFor'
+      ];
+      var VISIT_KEY = 'upsellVisitCount';
+
+      function pickUpsell() {
+        try {
+          var visit = parseInt(localStorage.getItem(VISIT_KEY), 10);
+          if (isNaN(visit) || visit < 0) visit = 0;
+          localStorage.setItem(VISIT_KEY, (visit + 1).toString());
+          return UPSELLS[ROTATION[visit % ROTATION.length]];
+        } catch (e) {
+          // localStorage not available — weighted random instead
+          return Math.random() < 0.7 ? UPSELLS.waitingFor : UPSELLS.biteRead;
+        }
+      }
+
+      var dismissButton = document.getElementById('upsellDismiss');
+      var upsellCard = document.getElementById('upsell');
+      var upsellImageLink = document.getElementById('upsellImageLink');
+      var upsellImage = document.getElementById('upsellImage');
+      var upsellText = document.getElementById('upsellText');
 
       function hideUpsell() {
         if (upsellCard) upsellCard.style.display = 'none';
-        if (upsellImage) upsellImage.style.display = 'none';
+        if (upsellImageLink) upsellImageLink.style.display = 'none';
       }
 
       function showUpsell() {
+        var choice = pickUpsell();
+        if (upsellImageLink) {
+          upsellImageLink.href = choice.href;
+          upsellImageLink.style.display = '';
+        }
+        if (upsellImage) {
+          upsellImage.src = choice.image;
+          upsellImage.alt = choice.alt;
+        }
+        if (upsellText) upsellText.innerHTML = choice.html;
         if (upsellCard) upsellCard.style.display = '';
-        if (upsellImage) upsellImage.style.display = '';
       }
 
       // Global function to reset the upsell state
-      window.resetBiteReadUpsell = function () {
+      window.resetUpsell = function () {
         try {
           localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(LEGACY_STORAGE_KEY);
         } catch (e) {}
         showUpsell();
-        console.log('BiteRead upsell reset.');
+        console.log('Upsell reset.');
       };
 
       if (!dismissButton || !upsellCard) {
         return;
       }
 
-      // Check if dismissed within the last 7 days
+      // Check if dismissed within the last 7 days (either key, so
+      // dismissals from before the rename are still honored)
       try {
-        var dismissedAt = localStorage.getItem(STORAGE_KEY);
+        var dismissedAt = localStorage.getItem(STORAGE_KEY) ||
+          localStorage.getItem(LEGACY_STORAGE_KEY);
         if (dismissedAt) {
           var daysSinceDismissal = (Date.now() - parseInt(dismissedAt, 10)) / (1000 * 60 * 60 * 24);
           if (daysSinceDismissal < DAYS_UNTIL_RESHOW) {
-            hideUpsell();
             return;
           }
         }
       } catch (e) {
         // localStorage not available, continue showing
       }
+
+      showUpsell();
 
       dismissButton.addEventListener('click', function () {
         hideUpsell();
