@@ -1,9 +1,50 @@
+diff --git a/index.html b/index.html
+index aad67a28..270c7742 100644
+--- a/index.html
++++ b/index.html
+@@ -8,9 +8,8 @@
+ 
+   <meta property="og:title" content="Learn Git Branching"/>
+   <meta property="og:type" content="website"/>
+-  <meta property="og:url" content="https://pcottle.github.io/learnGitBranching/index.html?demo"/>
+-  <meta property="og:image" content="https://pcottle.github.io/learnGitBranching/assets/learnGitBranching.png"/>
+   <meta property="og:description" content="An interactive Git visualization tool to educate and challenge!"/>
++  <script src="js/scorm.js" type="text/javascript"></script>
+ 
+   <!-- just testing some stuff -->
+   <meta property="og:temporal:status" content="active" />
+@@ -391,7 +390,7 @@
+   -->
+   <script type="module" src="/src/js/app/index.js"></script>
+ </head>
+-<body>
++<body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
+   <!-- Shown only if startup takes a beat; removed once the app has rendered.
+        A pure-CSS delayed fade-in means fast (e.g. English) loads never flash it. -->
+   <div id="appLoading" role="status">
+@@ -548,16 +547,6 @@
+ </style>
+ 
+ 
+-  <!-- Google tag (gtag.js) -->
+-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SF8FGS1DYX"></script>
+-  <script>
+-    window.dataLayer = window.dataLayer || [];
+-    function gtag(){dataLayer.push(arguments);}
+-    gtag('js', new Date());
+-
+-    gtag('config', 'G-SF8FGS1DYX');
+-  </script>
+-
+   <script>
+     (function () {
+       var STORAGE_KEY = 'upsellDismissedAt';
 diff --git a/src/js/level/index.js b/src/js/level/index.js
-index d56f027b..5203db86 100644
+index 77b8ce8c..e829edb9 100644
 --- a/src/js/level/index.js
 +++ b/src/js/level/index.js
-@@ -485,6 +485,17 @@ var Level = Sandbox.extend({
-
+@@ -499,6 +499,17 @@ class Level extends Sandbox {
+ 
        LevelActions.setLevelSolved(this.level.id, isBest);
        log.levelSolved(this.getEnglishName());
 +
@@ -19,14 +60,14 @@ index d56f027b..5203db86 100644
 +      }
      }
      this.hideGoal();
-
+ 
 diff --git a/src/js/stores/LevelStore.js b/src/js/stores/LevelStore.js
-index 795e51a1..a00f8462 100644
+index f4ba8e94..bae2f07c 100644
 --- a/src/js/stores/LevelStore.js
 +++ b/src/js/stores/LevelStore.js
-@@ -186,17 +186,19 @@ AppConstants.StoreSubscribePrototype,
+@@ -382,17 +382,19 @@ AppConstants.StoreSubscribePrototype,
    },
-
+ 
    isLevelSolved: function(levelID) {
 -    var levelData = _solvedMap[levelID];
 -    if (levelData === true) {
@@ -41,67 +82,27 @@ index 795e51a1..a00f8462 100644
 +
 +    return false;
    },
-
-
+   
+   
    isLevelBest: function(levelID) {
 -    var levelData = _solvedMap[levelID];
 -    return levelData ? levelData.best === true : false;
 +    return false;
    },
-
-
+   
+     
 diff --git a/src/style/font-awesome.css b/src/style/font-awesome.css
-index 57f6f1fe..b9f8a03c 100644
+index 7dea744e..b9f8a03c 100644
 --- a/src/style/font-awesome.css
 +++ b/src/style/font-awesome.css
 @@ -23,8 +23,8 @@
      */
  @font-face {
    font-family: "FontAwesome";
--  src: url('../assets/font/fontawesome-webfont.eot');
--  src: url('../assets/font/fontawesome-webfont.eot?#iefix') format('eot'), url('../assets/font/fontawesome-webfont.woff') format('woff'), url('../assets/font/fontawesome-webfont.ttf') format('truetype'), url('../assets/font/fontawesome-webfont.svg#FontAwesome') format('svg');
+-  src: url('/assets/font/fontawesome-webfont.eot');
+-  src: url('/assets/font/fontawesome-webfont.eot?#iefix') format('eot'), url('/assets/font/fontawesome-webfont.woff') format('woff'), url('/assets/font/fontawesome-webfont.ttf') format('truetype'), url('/assets/font/fontawesome-webfont.svg#FontAwesome') format('svg');
 +  src: url('assets/font/fontawesome-webfont.eot');
 +  src: url('assets/font/fontawesome-webfont.eot?#iefix') format('eot'), url('assets/font/fontawesome-webfont.woff') format('woff'), url('assets/font/fontawesome-webfont.ttf') format('truetype'), url('assets/font/fontawesome-webfont.svg#FontAwesome') format('svg');
    font-weight: normal;
    font-style: normal;
  }
-diff --git a/src/template.index.html b/src/template.index.html
-index 6d116f9c..4acf2f77 100644
---- a/src/template.index.html
-+++ b/src/template.index.html
-@@ -8,9 +8,8 @@
-
-   <meta property="og:title" content="Learn Git Branching"/>
-   <meta property="og:type" content="website"/>
--  <meta property="og:url" content="https://pcottle.github.io/learnGitBranching/index.html?demo"/>
--  <meta property="og:image" content="https://pcottle.github.io/learnGitBranching/assets/learnGitBranching.png"/>
-   <meta property="og:description" content="An interactive Git visualization tool to educate and challenge!"/>
-+  <script src="js/scorm.js" type="text/javascript"></script>
-
-   <!-- just testing some stuff -->
-   <meta property="og:temporal:status" content="active" />
-@@ -384,7 +383,7 @@
-   -->
-   <script defer src="{{buildDir}}/{{jsFile}}"></script>
- </head>
--<body>
-+<body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
-   <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
-   <noscript>
-     <div style="z-index:1000000;background:red;color:white;position:absolute;top:0;left:0;height:300px;width:300px;">
-@@ -499,15 +498,6 @@
- </style>
-
-
--  <!-- Google tag (gtag.js) -->
--  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SF8FGS1DYX"></script>
--  <script>
--    window.dataLayer = window.dataLayer || [];
--    function gtag(){dataLayer.push(arguments);}
--    gtag('js', new Date());
--
--    gtag('config', 'G-SF8FGS1DYX');
--  </script>
-
-   <script>
-     (function () {
