@@ -62,35 +62,25 @@ index 77b8ce8c..e829edb9 100644
      this.hideGoal();
  
 diff --git a/src/js/stores/LevelStore.js b/src/js/stores/LevelStore.js
-index f4ba8e94..bae2f07c 100644
+index f4ba8e94..2f8da8a2 100644
 --- a/src/js/stores/LevelStore.js
 +++ b/src/js/stores/LevelStore.js
-@@ -382,17 +382,19 @@ AppConstants.StoreSubscribePrototype,
+@@ -382,6 +382,15 @@ AppConstants.StoreSubscribePrototype,
    },
  
    isLevelSolved: function(levelID) {
--    var levelData = _solvedMap[levelID];
--    if (levelData === true) {
--      return true;
 +    var sd = ScormProcessGetValue("cmi.suspend_data");
 +    if (sd != null)
 +    {
 +      var sd_arr = sd.split(",");
-+      return sd_arr.includes(levelID);
-     }
--    return levelData ? levelData.solved === true : false;
++      if (sd_arr.includes(levelID)) {
++        return true;
++      }
++    }
 +
-+    return false;
-   },
-   
-   
-   isLevelBest: function(levelID) {
--    var levelData = _solvedMap[levelID];
--    return levelData ? levelData.best === true : false;
-+    return false;
-   },
-   
-     
+     var levelData = _solvedMap[levelID];
+     if (levelData === true) {
+       return true;
 diff --git a/src/style/font-awesome.css b/src/style/font-awesome.css
 index 7dea744e..b9f8a03c 100644
 --- a/src/style/font-awesome.css
