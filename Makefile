@@ -12,14 +12,14 @@ site:
 	cd learnGitBranching && \
 	git apply --whitespace=fix ../extension.patch && \
 	yarn install && \
-	yarn gulp fastBuild
+	yarn prebuild && ./node_modules/.bin/vite build && node scripts/postbuild.js
 	@echo \* ...done
 
 rebuild-site:
 	@echo \* Rebuilding learnGitBranching website files...
 	export PATH=$$HOME/.yarn/bin:$$HOME/.config/yarn/global/node_modules/.bin:$$PATH && \
 	cd learnGitBranching && \
-	yarn gulp fastBuild
+	yarn prebuild && ./node_modules/.bin/vite build && node scripts/postbuild.js
 	@echo \* ...done
 
 scorm:
