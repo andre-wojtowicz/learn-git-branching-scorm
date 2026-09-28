@@ -30,8 +30,7 @@
   <!-- end testing -->
   <meta http-equiv="content-language" content="en">
 
-  <link rel="stylesheet" href="./main-171057dc.css" type="text/css" charset="utf-8">
-  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="./assets/favicon-DXuu8THO.ico" type="image/x-icon">
 
 
   <!-- Templates from here on out... -->
@@ -135,6 +134,7 @@
         </div>
       <% } %>
     </div>
+    <div class="levelDropdownLoadStatus" role="status" aria-live="polite"></div>
   </script>
 
   <script type="text/html" id="series-view">
@@ -387,9 +387,19 @@
        For a much easier time perusing the source, see the individual files at:
           https://github.com/pcottle/learnGitBranching
   -->
-  <script defer src="./bundle-405d9ab4.js"></script>
+  <script type="module" crossorigin src="./assets/index-BKVtqQ1S.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-B0Z9INg1.js">
+  <link rel="modulepreload" crossorigin href="./assets/vendor-BfitfAY1.js">
+  <link rel="stylesheet" crossorigin href="./assets/index-8oNRbO21.css">
 </head>
 <body onload="ScormProcessInitialize();" onbeforeunload="ScormProcessTerminate();" onunload="ScormProcessTerminate();">
+  <!-- Shown only if startup takes a beat; removed once the app has rendered.
+       A pure-CSS delayed fade-in means fast (e.g. English) loads never flash it. -->
+  <div id="appLoading" role="status">
+    <span class="visuallyHidden">Loading&hellip;</span>
+  </div>
+  <style>#appLoading{position:fixed;inset:0;z-index:1000000;display:flex;align-items:center;justify-content:center;background:#5cbcfc;opacity:0;animation:appLoadingFadeIn .15s ease .25s forwards}#appLoading:after{content:"";width:28px;height:28px;border-radius:50%;border:3px solid rgba(0,0,0,.2);border-top-color:#222;animation:appLoadingSpin .7s linear infinite}@keyframes appLoadingFadeIn{to{opacity:1}}@keyframes appLoadingSpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){#appLoading:after{animation:none}}#appLoading[hidden]{display:none}#appLoading.appLoading-visible{opacity:1;animation:none}</style>
+
   <!-- lol noscript. I did not write 9k+ lines of JS just for you to bounce off my website -->
   <noscript>
     <div style="z-index:1000000;background:red;color:white;position:absolute;top:0;left:0;height:300px;width:300px;">
@@ -498,10 +508,7 @@
     <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
   </svg>
 </a>
-<style>
-  .github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
-</style>
-
+<style>.github-corner:hover .octo-arm{animation:octocat-wave .56s ease-in-out}@keyframes octocat-wave{0%,to{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media(max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave .56s ease-in-out}}</style>
 
 
   <script>
